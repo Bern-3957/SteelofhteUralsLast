@@ -1,0 +1,211 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block header_basket %}{{ basket_total_price }}{% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+<!-- Main page catalog -->
+<div class="mp_catalog">
+
+    <div class="mp_catalog_title">Каталог продукции</div>
+    <div class="mp_catalog_nav">
+        {% for cat in all_categories %}
+            <a href="{% url 'category_mp' cat.pk %}" class="mp_catalog_nav-link">{% if naw_cat|upper == cat.title|upper %}<u>{{ cat.title|upper }}</u>{% else %}{{ cat.title|upper }}{% endif %}</a>
+        {% endfor %}
+    </div>
+
+    <div class="mp_catalog_inner">
+        {% if products_of_category %}
+            {% for product in products_of_category %}
+                <div class="mp_catalog_item">
+                    <div class="mp_catalog_photo"><img src="https://via.placeholder.com/306x180" alt="1"></div>
+                    <div class="mp_catalog_text">{{ product.title }}</div>
+                    <div class="mp_catalog_line"></div>
+                    <div class="mp_catalog_line-up"></div>
+                </div>
+            {% endfor %}
+        {% else %}
+            {% for product in products %}
+                <div class="mp_catalog_item">
+                    <div class="mp_catalog_photo"><img src="https://via.placeholder.com/306x180" alt="1"></div>
+                    <div class="mp_catalog_text">{{ product.title }}</div>
+                    <div class="mp_catalog_line"></div>
+                    <div class="mp_catalog_line-up"></div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+</div>
+
+<div class="container">
+<div class="services">
+    <div class="services_title">Услуги</div>
+    <div class="services_inner">
+        <a href="#" class="services_item">
+            <img src="https://via.placeholder.com/350x330" alt="services_img">
+            <div class="services_item_title">Гибка металла</div>
+        </a>
+        <a href="{% url 'metal_cutting' %}" class="services_item">
+            <img src="https://via.placeholder.com/350x330" alt="services_img">
+            <div class="services_item_title">Резка металла</div>
+        </a>
+        <a href="#" class="services_item">
+            <img src="https://via.placeholder.com/350x330" alt="services_img">
+            <div class="services_item_title">Доставка</div>
+        </a>
+    </div>
+</div>
+</div>
+
+<div class="container">
+<div class="submitappl">
+    <div class="submitappl_inner">
+        <div class="submitappl_text">
+            Возникли вопросы? <br>
+            Оставьте заявку и мы с вами свяжемся
+        </div>
+        <a href="#" class="submitappl_btn" data-modal="#modal_form_request">
+            Оставить заявку
+        </a>
+    </div>
+</div>
+</div>
+
+<div class="container">
+<div class="about_us">
+    <div class="about_us_inner">
+        <div class="about_us_photo">
+            <img src="https://via.placeholder.com/430x300" alt="about_us_photo">
+        </div>
+        <div class="about_us_info">
+            <div class="about_us_title">О компани</div>
+            <div class="about_us_text">
+                Lorem ipsum dolor sit amet consectetur adipisicing
+                elit. <br> Porro laborum harum cum nam, obcaecati
+                earum molestias <br> error quam laboriosam neque
+                quas deleniti alias est nemo<br> itaque aliquam
+                maiores expedita unde!
+            </div>
+            <div class="about_us_btn">
+                Подробнее
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="container">
+<div class="circles">
+    <div class="circles_inner">
+        <div class="circles_item">
+            <div class="circles_item_number">
+                10
+            </div>
+            <div class="circles_item_text">
+                Lorem Ipsum используют
+            </div>
+        </div>
+        <div class="circles_item">
+            <div class="circles_item_number">
+                100
+            </div>
+            <div class="circles_item_text">
+                Lorem Ipsum используют
+            </div>
+        </div>
+        <div class="circles_item">
+            <div class="circles_item_number">
+                240
+            </div>
+            <div class="circles_item_text">
+                Lorem Ipsum используют
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="container">
+<div class="contact">
+    <div class="contact_info">
+        <div class="contact_title">
+            Контакты
+        </div>
+        <div class="contact_text">
+            Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться. Lorem Ipsum используют.
+        </div>
+    </div>
+    <div class="map">
+        <div class="map_info"></div>
+        <div class="map_google">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2889.551882432708!2d60.722391705182055!3d56.73514685171488!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x43c169e7c0543201%3A0x4b25cefaf6906dc2!2z0JXQmtCQ0JQsIDUsIDbQsiwg0JXQutCw0YLQtdGA0LjQvdCx0YPRgNCzLCDQodCy0LXRgNC00LvQvtCy0YHQutCw0Y8g0L7QsdC7LiwgNjIwMDEw!5e1!3m2!1sru!2sru!4v1669025571137!5m2!1sru!2sru" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="container">
+    <div class="submitappl">
+        <div class="submitappl_inner">
+            <div class="submitappl_text">
+                Возникли вопросы? <br>
+                Оставьте заявку и мы с вами свяжемся
+            </div>
+            <a href="#" class="submitappl_btn" data-modal="#modal_form_request">
+                Оставить заявку
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="modal_form_request">
+<div class="modal_dialog">
+
+    <div class="modal_content">
+        <button class="modal_close" type="button" data-close>
+            <img src="{% static 'UralsSteelStore/icons/modal-close.png' %}" alt="close-image">
+        </button>
+        <div class="modal_title">Заявка на обратный звонок</div>
+        <div class="modal_subtitle">Оставьте нам свои данные, и наши специалисты <br> свяжутся с вами в ближайшее время</div>
+        <form action="" method="post" class="modal_form">
+            {% csrf_token %}
+            <div class="modal_item">
+                <label for="{{ form.full_name.id_for_label }}" class="modal_label">{{ form.full_name.label }}</label>
+                {{ form.full_name }}
+            </div>
+
+            <div class="modal_item">
+                <label for="{{ form.phone_number.id_for_label }}" class="modal_label">{{ form.phone_number.label }}</label>
+                {{ form.phone_number }}
+            </div>
+
+            <div class="modal_item">
+                <label for="{{ form.email.id_for_label }}" class="modal_label">{{ form.email.label }}</label>
+                {{ form.email }}
+            </div>
+
+            <div class="modal_item">
+                <label for="{{ form.comment.id_for_label }}" class="modal_label">{{ form.comment.label }}</label>
+                {{ form.comment }}
+            </div>
+
+            <div class="modal_item_ch">
+                {{ form.checkb }}
+                <label for="{{ form.checkb.id_for_label }}" class="modal_checkb_lab">Я согласен <u>на обработку персональных данных</u></label>
+            </div>
+
+            <button type="submit" class="modal_btn">
+                Отправить заявку
+            </button>
+        </form>
+    </div>
+</div>
+</div>
+
+
+
+{% endblock %}

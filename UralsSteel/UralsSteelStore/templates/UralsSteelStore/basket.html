@@ -1,0 +1,88 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}Корзина{% endblock %}
+{% block subtitle %}{% endblock %}
+{% block kevas_razmer %}kevas-basket{% endblock %}
+{% block header_basket %}{{ basket_total_price }}{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+<div class="basket">
+    <div class="basket_mini_info">
+        <div class="basket_number">({{ basket_len }}) товара в корзине</div>
+        <form action="" method="post">
+            {% csrf_token %}
+            <button type="submit" value="clean" class="basket_no_style" name="clean_basket">Очистить корзину</button>
+{#          <input type="submit" name="good_info_btn" value="add" class="good_info_add_to_basket_btn">#}
+        </form>
+    </div>
+    <ul class="basket_head_block">
+        <li class="basket_head_block_photo_title">Фотография</li>
+        <li class="basket_head_block_h1_title">Название и арт.</li>
+        <li class="basket_head_block_price_title">Цена</li>
+        <li class="basket_head_block_quantity_title">Количество</li>
+        <li class="basket_head_block_sum_price_title">Сумма</li>
+    </ul>
+    <div class="basket_inner">
+
+{#        <div class="basket_item">#}
+{#            <img src="https://via.placeholder.com/172x110" alt="good_img" class="basket_item_img">#}
+{#            <div class="basket_item_title">Профнастил полимер Н60 0.45 ТУ 845/902 ПЭ RAL3009 красный оксид</div>#}
+{#            <div class="basket_item_price">859 ₽/м2 </div>#}
+{#            <div class="basket_item_quantity">#}
+{#                <img src="{% static 'UralsSteelStore/icons/box.png' %}" alt="box_icon" class="good_info_icon">#}
+{#                <div class="good_info_quantity">#}
+{#                    <a href="#"><img src="{% static 'UralsSteelStore/icons/remove.png' %}" alt="remove" class="good_info_quantity_remove" width="12"></a>#}
+{#                    <div class="good_info_quantity_number">0</div>#}
+{#                    <a href="#"><img src="{% static 'UralsSteelStore/icons/plus.png' %}" alt="plus" class="good_info_quantity_plus" width="12"></a>#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="basket_item_sum_price">10 250 руб</div>#}
+{#            <a href="#" class="basket_item_del_btn">#}
+{#                <img src="{% static 'UralsSteelStore/icons/x.png' %}" alt="x" class="basket_item_del_btn_img">#}
+{#            </a>#}
+{#        </div>#}
+
+        {% if good_id_to_basket_mes == 'basket_is_full' %}
+            {% for item in good_id_to_basket %}
+                <div class="basket_item">
+                    <img src="https://via.placeholder.com/172x110" alt="good_img" class="basket_item_img">
+                    <div class="basket_item_title">{{ item.title }}</div>
+                    <div class="basket_item_price">{{ item.price }} ₽/м2 </div>
+                    <div class="basket_item_quantity">
+                        <img src="{% static 'UralsSteelStore/icons/box.png' %}" alt="box_icon" class="good_info_icon">
+                        <div class="good_info_quantity">
+                            <a href="#"><img src="{% static 'UralsSteelStore/icons/remove.png' %}" alt="remove" class="good_info_quantity_remove" width="12"></a>
+                            <div class="good_info_quantity_number">0</div>
+                            <a href="#"><img src="{% static 'UralsSteelStore/icons/plus.png' %}" alt="plus" class="good_info_quantity_plus" width="12"></a>
+                        </div>
+                    </div>
+                    <div class="basket_item_sum_price">{{ item.price }} руб</div>
+                    <form action="" method="post">
+                    {% csrf_token %}
+                        <button type="submit" value="{{ item.pk }}" name="basket_item_del_btn" class="basket_no_style">
+                            <a href="#" class="basket_item_del_btn">
+                                <img src="{% static 'UralsSteelStore/icons/x.png' %}" alt="x" class="basket_item_del_btn_img">
+                            </a>
+                        </button>
+    {#                    <input type="submit" name="good_info_btn" value="add" class="good_info_add_to_basket_btn">#}
+                    </form>
+
+                </div>
+            {% endfor %}
+        {% else %}
+        {% endif %}
+
+
+    <div class="basket_total_price">
+        Итого: {{ basket_total_price }} руб.
+    </div>
+    <a href="#" class="basket_continue_btn">
+        Продолжить
+    </a>
+</div>
+</div>
+{% endblock %}
