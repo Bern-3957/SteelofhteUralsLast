@@ -1,9 +1,12 @@
-from django.shortcuts import render
+import random
+
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from .models import *
 from .forms import *
 from django.db.models import Count
+import pandas as pd
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import BaseFormView
 
@@ -167,8 +170,10 @@ def shop_catalog(request, slug_cat=None,):
         print(good_id_to_basket)
         if good_id_to_basket not in memory['good_id_to_basket']:
             memory['good_id_to_basket'].append(good_id_to_basket)
+            return redirect(request.META['HTTP_REFERER'])
     if memory['basket_total_price']:
         context['basket_total_price'] = memory['basket_total_price']
+
 
 
     return render(request, 'UralsSteelStore/shop_catalog.html', context=context)
@@ -213,8 +218,11 @@ def about_good(request, slug_cat=None, slug_good_name=None, current_img=None):
         print(good_id_to_basket)
         if good_id_to_basket not in memory['good_id_to_basket']:
             memory['good_id_to_basket'].append(good_id_to_basket)
+            return redirect(request.META['HTTP_REFERER'])
+
     if memory['basket_total_price']:
         context['basket_total_price'] = memory['basket_total_price']
+        return redirect(request.META['HTTP_REFERER'])
 
 
     return render(request, 'UralsSteelStore/about_good.html', context=context)
@@ -245,9 +253,10 @@ def basket(request):
         memory['basket_total_price'] = basket_total_price
         context['good_id_to_basket_mes'] = 'basket_is_full'
     else:
-        context['basket_total_price'] = '0'
+        context['basket_total_price'] = 0
         context['good_id_to_basket_mes'] = 'basket_is_empty'
         context['basket_len'] = 0
+
     print(context)
 
     if request.POST.get('basket_item_del_btn'):
@@ -259,6 +268,7 @@ def basket(request):
         except ValueError:
             print('Item not in list')
         memory['good_id_to_basket'] = begine
+        return redirect(request.META['HTTP_REFERER'])
 
     if request.POST.get('clean_basket'):
         begine = memory['good_id_to_basket']
@@ -267,6 +277,46 @@ def basket(request):
         except:
             print('Item not in list')
         memory['good_id_to_basket'] = begine
+        memory['basket_total_price'] = 0
+        return redirect(request.META['HTTP_REFERER'])
+
+    # if request.method == 'POST':
+    #     form = RequestForm(request.POST)
+    #     if form.is_valid():
+    #         print(form.cleaned_data)
+    # else:
+    #     form = RequestForm()
+    #
+    # context['form'] = form
+
+    if request.method == 'POST':
+        form = BasketRequestForm(request.POST)
+        if form.is_valid():
+            print(memory['good_id_to_basket'], form.cleaned_data)
+
+            df = pd.DataFrame({'ID товаров': [order for order in memory['good_id_to_basket']],
+                               'Доставка': form.cleaned_data['delivery_radio'],
+                               'Оплата': form.cleaned_data['pay_radio'],
+                               'Имя': form.cleaned_data['full_name'],
+                               'Email': form.cleaned_data['email'],
+                               'Номер телефона': form.cleaned_data['phone_number'],
+                               'Комментарий к заказу': form.cleaned_data['comment'],
+                               'Обработка данных': form.cleaned_data['checkb'],
+                               })
+            #lf
+
+            df.to_excel('./orders_list.xlsx')
+            memory['good_id_to_basket'].clear()
+            memory['basket_total_price'] = 0
+            return redirect(request.path)
+            # context['order_number'] = random.randint(50000, 1346641)
+    else:
+        form = BasketRequestForm()
+
+
+    context['form'] = form
+
+
     return render(request, 'UralsSteelStore/basket.html', context=context)
 
 

@@ -88,4 +88,6 @@ $ (function (){
         // nextEl.addClass("dispFlex");
     });
 
+    $('.basket_continue_btn').click(function() { $('.basket_order').hide().css('display', 'flex'), $('.basket_continue_btn').hide().css('display','none')});
+
 });

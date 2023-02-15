@@ -9,6 +9,7 @@
 
 
 {% block content %}
+
 <div class="container">
 <div class="basket">
     <div class="basket_mini_info">
@@ -84,5 +85,129 @@
         Продолжить
     </a>
 </div>
+
+<div class="basket_order">
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="basket_order_title">Оформить заказ</div>
+        <div class="basket_order_common">
+            <h4 class="basket_order_common_title">Способ доставки</h4>
+            <div class="basket_order_common_variants">
+
+{#                <div class="basket_order_common_variants_item">#}
+{#                    <input class="basket_order_common_variants_item_inp" width="20" type="radio" id="delivery_radio1" name="delivery" value="Самовывоз">#}
+{#                    {{ form.delivery_radio }}#}
+{#                    <label class="basket_order_common_variants_item_lab" for="delivery_radio1">Самовывоз</label>#}
+{#                </div>#}
+{##}
+{#                <div class="basket_order_common_variants_item">#}
+{#                    {{ form.delivery_radio }}#}
+{#                    <input class="basket_order_common_variants_item_inp" type="radio" id="delivery_radio2" name="delivery" value="Доставка собственным транспортом">#}
+{#                    <label class="basket_order_common_variants_item_lab" for="delivery_radio2">Доставка собственным транспортом</label>#}
+{#                </div>#}
+{##}
+{#                <div class="basket_order_common_variants_item">#}
+{#                    {{ form.delivery_radio }}#}
+{#                    <input class="basket_order_common_variants_item_inp" type="radio" id="delivery_radio3" name="delivery" value="Доставка Транспортной компаней">#}
+{#                    <label class="basket_order_common_variants_item_lab" for="delivery_radio3">Доставка Транспортной компаней</label>#}
+{#                </div>#}
+                {% for i in form.delivery_radio %}
+                    <div class="basket_order_common_variants_item">
+                        <label for="{{ i.id_for_lablel }}" class="basket_order_common_variants_item_lab">
+                            {{ i }}
+                        </label>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <div class="basket_order_common">
+            <h4 class="basket_order_common_title">Способ оплаты</h4>
+            <div class="basket_order_common_variants">
+
+{#                <div class="basket_order_common_variants_item_pay">#}
+{#                    {{ form.pay_radio }}#}
+{#                    <input class="basket_order_common_variants_item_inp" type="radio" id="pay_radio1" name="pay" value="Наличными при самовывозе">#}
+{#                    <label class="basket_order_common_variants_item_lab-pay" for="pay_radio1">Наличными при самовывозе</label>#}
+{#                </div>#}
+{##}
+{#                <div class="basket_order_common_variants_item_pay">#}
+{#                    {{ form.pay_radio }}#}
+{#                    <input class="basket_order_common_variants_item_inp" type="radio" id="pay_radio2" name="pay" value="Оплата по счету">#}
+{#                    <label class="basket_order_common_variants_item_lab-pay" for="pay_radio2">Оплата по счету</label>#}
+{#                </div>#}
+{##}
+{#                <div class="basket_order_common_variants_item_pay">#}
+{#                    {{ form.pay_radio }}#}
+{#                    <input class="basket_order_common_variants_item_inp" type="radio" id="pay_radio3" name="pay" value="Оплата по квитанции">#}
+{#                    <label class="basket_order_common_variants_item_lab-pay" for="pay_radio3">Оплата по квитанции</label>#}
+{#                </div>#}
+{##}
+{#                <div class="basket_order_common_variants_item_pay">#}
+{#                    {{ form.pay_radio }}#}
+{#                    <input class="basket_order_common_variants_item_inp" type="radio" id="pay_radio4" name="pay" value="Оплата картой при самовывозе">#}
+{#                    <label class="basket_order_common_variants_item_lab-pay" for="pay_radio4">Оплата картой при самовывозе</label>#}
+{#                </div>#}
+                {% for i in form.pay_radio %}
+                    <div class="basket_order_common_variants_item_pay">
+                        <label for="{{ i.id_for_lablel }}" class="basket_order_common_variants_item_lab-pay">
+                            {{ i }}
+                        </label>
+
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+        <div class="settlement_form">
+            <div class="settlement_form_title-order">Личный данные</div>
+            <div class="settlement_form_inner-order">
+                <div class="settlement_form_left-order">
+
+                    <div class="settlement_form_left_item">
+                        <label for="full_name_inp" class="full_name_lab">{{ form.full_name.label }}</label>
+                        {{ form.full_name }}
+                    </div>
+
+                    <div class="settlement_form_left_item">
+                        <label for="{{ form.email.id_for_label }}" class="email_lab">{{ form.email.label }}</label>
+                        {{ form.email }}
+                    </div>
+
+                    <div class="settlement_form_left_item">
+                        <label for="{{ form.phone_number.id_for_label }}" class="ph_number_lab">{{ form.phone_number.label }}</label>
+                        {{ form.phone_number }}
+                    </div>
+
+                </div>
+
+                <div class="settlement_form_right-order">
+                    <label for="{{ form.comment.id_for_label }}" class="comments_lab-order">{{ form.comment.label }}</label>
+                    {{ form.comment }}
+                </div>
+
+                <div class="settlement_form_checkbox">
+                    {{ form.checkb }}
+                    <label for="checkbox_inp" class="checkbox_lab">Я согласен <u>на обработку персональных данных</u></label>
+                </div>
+
+                <button type="submit" class="settlement_form_btn">
+                    Оформить заказ
+                </button>
+
+                <div class="order_number">
+                    {% if order_number %}
+                        <div>Ваш номер заказа: {{ order_number }}</div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </form>
 </div>
+</div>
+</div>
+
 {% endblock %}
