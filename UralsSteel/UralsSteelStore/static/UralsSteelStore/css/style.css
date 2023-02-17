@@ -1599,4 +1599,64 @@ span {
   margin: 0 auto;
   margin-bottom: 20px;
 }
+.contacts_ways {
+  display: flex;
+  flex-direction: row;
+  padding: 30px 100px;
+  gap: 70px;
+}
+.contacts_ways_map {
+  width: 50%;
+}
+.contacts_ways_info {
+  width: 50%;
+  padding: 70px 0;
+}
+.contacts_ways_info_icons {
+  width: 20px;
+  margin-right: 20px;
+  max-height: 30px;
+}
+.contacts_ways_info_title {
+  font-weight: 500;
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+.contacts_ways_info_adress {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+}
+.contacts_ways_info_adress_title {
+  font-weight: 500;
+  font-size: 16px;
+}
+.contacts_ways_info_adress:after {
+  position: absolute;
+  content: " ";
+  display: block;
+  background-color: rgba(109, 111, 113, 0.2);
+  width: 100%;
+  height: 1px;
+  top: 40px;
+  left: 0;
+}
+.contacts_ways_info_phone {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.contacts_ways_info_phone_number {
+  font-weight: 500;
+  font-size: 16px;
+}
+.contacts_ways_info_email {
+  display: flex;
+  align-items: center;
+}
+.contacts_ways_info_email_title {
+  font-weight: 500;
+  font-size: 16px;
+}
 /*# sourceMappingURL=style.css.map */

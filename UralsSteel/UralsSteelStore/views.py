@@ -14,7 +14,7 @@ from django.views.generic.edit import BaseFormView
 menu = [{'title': 'Услуги', 'url_name': 'services'},
         {'title': 'Каталог продукции', 'url_name': 'shop_catalog'},
         {'title': 'О компании', 'url_name': 'about_us'},
-        {'title': 'Контакты', 'url_name': 'contacts'},
+        {'title': 'Контакты', 'url_name': 'contacts_ways'},
 ]
 
 memory = {
@@ -92,6 +92,8 @@ def services(request):
         form = ModalRequestForm()
 
     context = {'menu': menu, 'form': form}
+    if memory['basket_total_price']:
+        context['basket_total_price'] = memory['basket_total_price']
     return render(request, 'UralsSteelStore/services.html', context=context)
 
 def metal_cutting(request):
@@ -103,6 +105,9 @@ def metal_cutting(request):
     else:
         form = RequestForm()
     context = {'menu': menu, 'form': form}
+    if memory['basket_total_price']:
+        context['basket_total_price'] = memory['basket_total_price']
+
     return render(request, 'UralsSteelStore/metal_cutting.html', context=context)
 
 def shop_catalog(request, slug_cat=None,):
@@ -220,6 +225,7 @@ def about_good(request, slug_cat=None, slug_good_name=None, current_img=None):
             memory['good_id_to_basket'].append(good_id_to_basket)
             return redirect(request.META['HTTP_REFERER'])
 
+    # Мешает открыть инфу о товаре
     if memory['basket_total_price']:
         context['basket_total_price'] = memory['basket_total_price']
         return redirect(request.META['HTTP_REFERER'])
@@ -326,9 +332,25 @@ def about_us(request):
     context = {
         'menu': menu,
     }
+    if memory['basket_total_price']:
+        context['basket_total_price'] = memory['basket_total_price']
+
     return render(request, 'UralsSteelStore/about_us.html', context=context)
-def contacts(request):
-    pass
+
+def contacts_ways(request):
+    context = {
+        'menu': menu,
+    }
+    if request.method == 'POST':
+        form = RequestForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+    else:
+        form = RequestForm()
+    context['form'] = form
+    if memory['basket_total_price']:
+        context['basket_total_price'] = memory['basket_total_price']
+    return render(request, 'UralsSteelStore/contacts_ways.html', context=context)
 
 
 
