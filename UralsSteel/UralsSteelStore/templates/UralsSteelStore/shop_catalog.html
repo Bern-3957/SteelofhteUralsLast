@@ -87,7 +87,7 @@
                     <div class="shop_goods_item_pl"  id="shop_goods_item_big">
                         <div class="shop_goods_item_left_pl">
 {#                            <img src="{% if image.image.url %}{{ image.image.url }}{% else %}https://via.placeholder.com/320x320 {% endif %}" alt="photo" class="shop_goods_img_pl">#}
-                                <img src="{% for i, z in sps.items %}{% if item.pk == i %}{{ z }}{% endif %}{% endfor %}" alt="photo" class="shop_goods_img_pl">
+                                <a class="shop_goods_link" href="{{ item.get_absolute_url }}"><img src="{% for i, z in sps.items %}{% if item.pk == i %}{{ z }}{% endif %}{% endfor %}" alt="photo" class="shop_goods_img_pl"></a>
                         </div>
                         <div class="shop_goods_item_right_pl">
                             <div class="shop_goods_item_text_pl">
@@ -100,7 +100,11 @@
                             </div>
                             <div class="shop_goods_basket_pl">
                                 <div class="shop_goods_basket_price_pl">Цена: {{ item.price }}₽ м\2</div>
-                                <a href="#" class="shop_goods_basket_btn_pl">Добавить в корзину</a>
+                                <form action="" method="post">
+                                    {% csrf_token %}
+{#                                    <button type="submit" value="{{ item.pk }}" name="good_info_btn"><a href="#" class="shop_goods_basket_btn_pl">Добавить в корзину</a></button>#}
+                                    <button type="submit" value="{{ item.pk }}" name="good_info_btn" class="shop_goods_basket_btn_pl">Добавить в корзину</button>
+                                </form>
                             </div>
                         </div>
                     </div>

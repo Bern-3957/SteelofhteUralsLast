@@ -223,12 +223,14 @@ def about_good(request, slug_cat=None, slug_good_name=None, current_img=None):
         print(good_id_to_basket)
         if good_id_to_basket not in memory['good_id_to_basket']:
             memory['good_id_to_basket'].append(good_id_to_basket)
+            context['basket_total_price'] = memory['basket_total_price']
             return redirect(request.META['HTTP_REFERER'])
+        return redirect(request.META['HTTP_REFERER'])
 
     # Мешает открыть инфу о товаре
     if memory['basket_total_price']:
         context['basket_total_price'] = memory['basket_total_price']
-        return redirect(request.META['HTTP_REFERER'])
+        # return redirect(request.META['HTTP_REFERER'])
 
 
     return render(request, 'UralsSteelStore/about_good.html', context=context)

@@ -1161,6 +1161,7 @@ span {
   background-color: gray;
   color: black;
   font-size: 12px;
+  cursor: pointer;
 }
 .shop_goods_img {
   position: absolute;
