@@ -14,5 +14,7 @@ urlpatterns = [
     path('shop_catalog/<slug:slug_cat>/about_good/<slug:slug_good_name>/', about_good, name='about_good'),
     path('shop_catalog/<slug:slug_cat>/about_good/<slug:slug_good_name>/<slug:current_img>', about_good, name='current_img'),
     path('basket/', basket, name='basket'),
+    path('registration/', RegisterUser.as_view(), name='registration'),
+    path('authorisation/', authorisation, name='authorisation')
 
 ]

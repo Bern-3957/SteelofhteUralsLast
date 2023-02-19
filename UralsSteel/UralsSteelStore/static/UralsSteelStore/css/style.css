@@ -158,6 +158,21 @@ p {
 .header_search {
   margin-right: 70px;
 }
+.header_auth_reg {
+  margin-right: 43px;
+}
+.header_auth_reg .header_auth {
+  color: black;
+}
+.header_auth_reg .header_reg {
+  color: black;
+}
+.header_auth_reg .header_auth:hover {
+  text-decoration: underline;
+}
+.header_auth_reg .header_reg:hover {
+  text-decoration: underline;
+}
 .header_basket {
   width: 91px;
   height: 35px;
@@ -1659,5 +1674,50 @@ span {
 .contacts_ways_info_email_title {
   font-weight: 500;
   font-size: 16px;
+}
+.registration_form {
+  padding: 0 200px;
+  margin-bottom: 150px;
+}
+.registration_form_inner {
+  display: flex;
+  justify-content: center;
+}
+.registration_form_inner .registration_form_item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.registration_form_inner .registration_form_item_lab {
+  font-size: 16px;
+  font-weight: 400;
+  color: black;
+}
+.registration_form_inner .registration_form_item_inp {
+  width: 370px;
+  height: 58px;
+  border: 1px solid #F4F5F7;
+  background: #F4F5F7;
+  border-radius: 4px;
+  margin-top: 6px;
+  padding: 0 20px;
+}
+.registration_form_inner .registration_form_item_btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  background: #848C97;
+  border-radius: 4px;
+  width: 200px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px;
+  color: #fff;
+  margin-top: 20px;
 }
 /*# sourceMappingURL=style.css.map */

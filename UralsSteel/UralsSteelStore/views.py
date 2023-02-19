@@ -1,5 +1,4 @@
 import random
-
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -7,7 +6,7 @@ from .models import *
 from .forms import *
 from django.db.models import Count
 import pandas as pd
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from django.views.generic.edit import BaseFormView
 
 # Create your views here.
@@ -353,6 +352,21 @@ def contacts_ways(request):
     if memory['basket_total_price']:
         context['basket_total_price'] = memory['basket_total_price']
     return render(request, 'UralsSteelStore/contacts_ways.html', context=context)
+
+
+class RegisterUser(CreateView):
+    form_class = RegistrationUserForm
+    template_name = 'UralsSteelStore/registration.html'
+    success_url = reverse_lazy('authorisation')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        return context
+
+def authorisation(request):
+    return render(request, 'UralsSteelStore/authorisation.html')
+
 
 
 

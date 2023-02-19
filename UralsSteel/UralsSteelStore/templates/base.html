@@ -33,8 +33,12 @@
                 <img class="header_phone_icon" src="{% static 'UralsSteelStore/icons/header/phone.svg' %}" width="25" height="18" alt="phone-icon">
                 <a class="header_number" href="#">+7(257)255-56-95</a>
             </div>
-            <div class="header_search">
-                <a href="#"><img src="{% static 'UralsSteelStore/icons/header/search.svg' %}" width="25" alt="search-icon"></a>
+{#            <div class="header_search">#}
+{#                <a href="#"><img src="{% static 'UralsSteelStore/icons/header/search.svg' %}" width="25" alt="search-icon"></a>#}
+{#            </div>#}
+            <div class="header_auth_reg">
+                <a href="{% url 'registration' %}" class="header_auth">Регистрация</a> | <a href="#" class="header_reg">Войти</a>
+
             </div>
             <div class="header_basket">
                 <a href="{% url 'basket' %}"><img src="{% static 'UralsSteelStore/icons/header/basket.svg' %}" width="25" alt="basket-icon"></a>

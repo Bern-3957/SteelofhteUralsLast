@@ -1,4 +1,7 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
 
 class RequestForm(forms.Form):
 
@@ -111,3 +114,15 @@ class BasketRequestForm(forms.Form):
         attrs={
             'class': 'checkbox_inp',
         }))
+
+class RegistrationUserForm(UserCreationForm):
+
+    username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'registration_form_item_inp'}))
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'registration_form_item_inp'}))
+    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'registration_form_item_inp'}))
+    password2 = forms.CharField(label='Повтор пароля', widget=forms.PasswordInput(attrs={'class': 'registration_form_item_inp'}))
+
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
