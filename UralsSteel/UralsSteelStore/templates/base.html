@@ -37,8 +37,11 @@
 {#                <a href="#"><img src="{% static 'UralsSteelStore/icons/header/search.svg' %}" width="25" alt="search-icon"></a>#}
 {#            </div>#}
             <div class="header_auth_reg">
-                <a href="{% url 'registration' %}" class="header_auth">Регистрация</a> | <a href="#" class="header_reg">Войти</a>
-
+                {% if request.user.is_authenticated %}
+                {{ user.username }} | <a href="{% url 'logout' %}" style="color: black">Выйти</a>
+                {% else %}
+                <a href="{% url 'registration' %}" class="header_auth">Регистрация</a> | <a href="{% url 'authorisation' %}" class="header_reg">Войти</a>
+                {% endif %}
             </div>
             <div class="header_basket">
                 <a href="{% url 'basket' %}"><img src="{% static 'UralsSteelStore/icons/header/basket.svg' %}" width="25" alt="basket-icon"></a>

@@ -1720,4 +1720,53 @@ span {
   color: #fff;
   margin-top: 20px;
 }
+.authorisation_form {
+  padding: 0 200px;
+  margin-bottom: 150px;
+}
+.authorisation_form_inner {
+  display: flex;
+  justify-content: center;
+}
+.authorisation_form_inner .authorisation_form_item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.authorisation_form_inner .authorisation_form_item_lab {
+  font-size: 16px;
+  font-weight: 400;
+  color: black;
+}
+.authorisation_form_inner .authorisation_form_item_inp {
+  width: 370px;
+  height: 58px;
+  border: 1px solid #F4F5F7;
+  background: #F4F5F7;
+  border-radius: 4px;
+  margin-top: 6px;
+  padding: 0 20px;
+}
+.authorisation_form_inner .authorisation_form_item_btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  background: #848C97;
+  border-radius: 4px;
+  width: 200px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px;
+  color: #fff;
+  margin-top: 20px;
+}
+.authorisation_form_error {
+  max-width: 370px;
+  word-wrap: break-word;
+}
 /*# sourceMappingURL=style.css.map */

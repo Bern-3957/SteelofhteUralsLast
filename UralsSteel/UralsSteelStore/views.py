@@ -1,4 +1,8 @@
 import random
+
+from django.contrib.auth import logout, login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -80,7 +84,6 @@ def index(request, category_id=1):
         context['basket_total_price'] = memory['basket_total_price']
 
     return render(request, 'UralsSteelStore/index.html', context=context)
-
 
 def services(request):
     if request.method == 'POST':
@@ -234,7 +237,6 @@ def about_good(request, slug_cat=None, slug_good_name=None, current_img=None):
 
     return render(request, 'UralsSteelStore/about_good.html', context=context)
 
-
 def basket(request):
 
     context = {
@@ -326,9 +328,6 @@ def basket(request):
 
     return render(request, 'UralsSteelStore/basket.html', context=context)
 
-
-
-
 def about_us(request):
     context = {
         'menu': menu,
@@ -355,6 +354,9 @@ def contacts_ways(request):
 
 
 class RegisterUser(CreateView):
+    """Класс регистрации пользователей, при успешной регистрации пользователь автоматически авторизуется благодаря
+    методу form_valid"""
+
     form_class = RegistrationUserForm
     template_name = 'UralsSteelStore/registration.html'
     success_url = reverse_lazy('authorisation')
@@ -363,11 +365,29 @@ class RegisterUser(CreateView):
         context = super().get_context_data(**kwargs)
         context['menu'] = menu
         return context
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
 
-def authorisation(request):
-    return render(request, 'UralsSteelStore/authorisation.html')
+class AuthorisationUser(LoginView):
+    """Класс авторизации пользователей, при успешной авторизации перенаправляет на первую страницу"""
 
+    form_class = AuthorisationUserForm
+    template_name = 'UralsSteelStore/authorisation.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('home')
+
+def logout_user(request):
+    """Выход пользователя из авторизованного состояния"""
+    logout(request)
+    return redirect('authorisation')
 
 
 
