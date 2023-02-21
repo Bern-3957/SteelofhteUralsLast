@@ -45,15 +45,19 @@ p {
 }
 .kevas-shop {
   max-height: 360px;
+  padding: 5px 10px ;
 }
 .kevas-shop_goods {
   max-height: 100px;
+  padding: 5px 10px ;
 }
 .kevas-basket {
   max-height: 310px;
+  padding: 5px 10px ;
 }
 .kevas_about_us {
   max-height: 360px;
+  padding: 5px 10px ;
 }
 .kevas_short_inf {
   width: 100%;

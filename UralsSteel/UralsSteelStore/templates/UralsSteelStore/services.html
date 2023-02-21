@@ -79,7 +79,7 @@
         </button>
         <div class="modal_title">Заявка на обратный звонок</div>
         <div class="modal_subtitle">Оставьте нам свои данные, и наши специалисты <br> свяжутся с вами в ближайшее время</div>
-        <form action="{% url 'home' %}" method="post" class="modal_form">
+        <form action="{% url 'services' %}" method="post" class="modal_form">
             {% csrf_token %}
             <div class="modal_item">
                 <label for="{{ form.full_name.id_for_label }}" class="modal_label">{{ form.full_name.label }}</label>

@@ -6,6 +6,9 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import TemplateView
+
 from .models import *
 from .forms import *
 from django.db.models import Count
@@ -25,92 +28,126 @@ memory = {
     'basket_total_price': 0
 }
 
-# class IndexListView(ListView, ):
-#     model = Products
-#     context_object_name = 'products'
-#     template_name = 'UralsSteelStore/index.html'
-#     # form_c = {}
-#     success_url = reverse_lazy('home')
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         category_id = 1
-#         context['menu'] = menu
-#         context['all_categories'] = Category_mp.objects.annotate(cnt=Count('products')).filter(cnt__gt=0)
-#         context['products'] = Products.objects.filter(category=self.kwargs['category_id'] if 'category_id' in self.kwargs else category_id)
-#         context['naw_cat'] = Category_mp.objects.get(pk=self.kwargs['category_id'] if 'category_id' in self.kwargs else category_id)
-#         # if 'form' in self.form_c:
-#         #     context['form'] = self.form_c['form']
-#         # context['form'] = ModalRequestForm()
-#         # print('POST', self.request.POST.get[''])
+class IndexListView(ListView):
+    model = Products
+    context_object_name = 'products'
+    template_name = 'UralsSteelStore/index.html'
+    success_url = reverse_lazy('home')
+
+    def get(self, request, *args, **kwargs):
+        form = ModalRequestForm()
+        self.object_list = self.get_context(form=form)
+        return render(request, self.template_name, context=self.object_list)
+    def post(self, request, *args, **kwargs):
+        form = ModalRequestForm(request.POST)
+        context = self.get_context(form=form)
+        if form.is_valid():
+            print(form.cleaned_data)
+        return render(request, self.template_name, context=context)
+    def get_context(self, **kwargs):
+        context = dict()
+        category_id = 1
+        context['menu'] = menu
+        context['all_categories'] = Category_mp.objects.annotate(cnt=Count('products')).filter(cnt__gt=0)
+        context['products'] = Products.objects.filter(category=self.kwargs['category_id'] if 'category_id' in self.kwargs else category_id)
+        context['naw_cat'] = Category_mp.objects.get(pk=self.kwargs['category_id'] if 'category_id' in self.kwargs else category_id)
+        if 'form' in kwargs:
+            context['form'] = kwargs['form']
+        return context
+# def index(request, category_id=1):
+#     if request.method == 'POST':
+#         form = ModalRequestForm(request.POST)
+#         if form.is_valid():
+#             print(form.cleaned_data)
+#     else:
+#         form = ModalRequestForm()
 #
-#         return context
+#     all_categories = Category_mp.objects.annotate(cnt=Count('products')).filter(cnt__gt=0)
+#
+#
+#     products = Products.objects.filter(category=category_id)
+#     naw_cat = Category_mp.objects.get(pk=category_id)
+#
+#     context = {
+#         'products': products,
+#         'all_categories': all_categories,
+#         'menu': menu,
+#         'naw_cat': naw_cat,
+#         'form': form
+#     }
+#     if memory['basket_total_price']:
+#         context['basket_total_price'] = memory['basket_total_price']
+#
+#     return render(request, 'UralsSteelStore/index.html', context=context)
+# def services(request):
+#     if request.method == 'POST':
+#         form = ModalRequestForm(request.POST)
+#         if form.is_valid():
+#             print(form.cleaned_data)
+#     else:
+#         form = ModalRequestForm()
+#
+#     context = {'menu': menu, 'form': form}
+#     if memory['basket_total_price']:
+#         context['basket_total_price'] = memory['basket_total_price']
+#     return render(request, 'UralsSteelStore/services.html', context=context)
+class ServicesView(View):
+    template_name = 'UralsSteelStore/services.html'
 
-    # def get_queryset(self, *args, **kwargs):
-    #     if self.request.method == 'POST':
-    #         form = ModalRequestForm(self.request.POST)
-    #         if form.is_valid():
-    #             # print('ka', form.cleaned_data)
-    #             pass
-    #     else:
-    #         form = ModalRequestForm()
-    #     self.form_c['form'] = form
-    #     print('---------------',self.request.method)
-
-
-        # Метод Index Замена классу IndexListView
-
-def index(request, category_id=1):
-    if request.method == 'POST':
-        form = ModalRequestForm(request.POST)
-        if form.is_valid():
-            print(form.cleaned_data)
-    else:
+    def get(self, request, *args, **kwargs):
         form = ModalRequestForm()
+        context = {}
+        if memory['basket_total_price']:
+            context['basket_total_price'] = memory['basket_total_price']
+        context['form'] = form
+        context['menu'] = menu
+        return render(request, self.template_name, context=context)
 
-    all_categories = Category_mp.objects.annotate(cnt=Count('products')).filter(cnt__gt=0)
-
-
-    products = Products.objects.filter(category=category_id)
-    naw_cat = Category_mp.objects.get(pk=category_id)
-
-    context = {
-        'products': products,
-        'all_categories': all_categories,
-        'menu': menu,
-        'naw_cat': naw_cat,
-        'form': form
-    }
-    if memory['basket_total_price']:
-        context['basket_total_price'] = memory['basket_total_price']
-
-    return render(request, 'UralsSteelStore/index.html', context=context)
-
-def services(request):
-    if request.method == 'POST':
+    def post(self, request, *args, **kwargs):
         form = ModalRequestForm(request.POST)
+        context = {}
         if form.is_valid():
             print(form.cleaned_data)
-    else:
-        form = ModalRequestForm()
+        if memory['basket_total_price']:
+            context['basket_total_price'] = memory['basket_total_price']
+        context['form'] = form
+        context['menu'] = menu
+        return render(request, self.template_name, context=context)
+# def metal_cutting(request):
+#
+#     if request.method == 'POST':
+#         form = RequestForm(request.POST)
+#         if form.is_valid():
+#             print(form.cleaned_data)
+#     else:
+#         form = RequestForm()
+#     context = {'menu': menu, 'form': form}
+#     if memory['basket_total_price']:
+#         context['basket_total_price'] = memory['basket_total_price']
+#
+#     return render(request, 'UralsSteelStore/metal_cutting.html', context=context)
+class Metal_cutting_View(View):
+    template_name = 'UralsSteelStore/metal_cutting.html'
 
-    context = {'menu': menu, 'form': form}
-    if memory['basket_total_price']:
-        context['basket_total_price'] = memory['basket_total_price']
-    return render(request, 'UralsSteelStore/services.html', context=context)
-
-def metal_cutting(request):
-
-    if request.method == 'POST':
-        form = RequestForm(request.POST)
-        if form.is_valid():
-            print(form.cleaned_data)
-    else:
+    def get(self, request, *args, **kwargs):
         form = RequestForm()
-    context = {'menu': menu, 'form': form}
-    if memory['basket_total_price']:
-        context['basket_total_price'] = memory['basket_total_price']
+        context = {}
+        if memory['basket_total_price']:
+            context['basket_total_price'] = memory['basket_total_price']
+        context['form'] = form
+        context['menu'] = menu
+        return render(request, self.template_name, context=context)
 
-    return render(request, 'UralsSteelStore/metal_cutting.html', context=context)
+    def post(self, request, *args, **kwargs):
+        form = RequestForm(request.POST)
+        context = {}
+        if form.is_valid():
+            print(form.cleaned_data)
+        if memory['basket_total_price']:
+            context['basket_total_price'] = memory['basket_total_price']
+        context['form'] = form
+        context['menu'] = menu
+        return render(request, self.template_name, context=context)
 
 def shop_catalog(request, slug_cat=None,):
 
@@ -123,26 +160,26 @@ def shop_catalog(request, slug_cat=None,):
 
     cats = Category.objects.annotate(cnt=Count('goods')).order_by('id')
     current_select_item = request.POST.get('shop_goods_start_with')
+    from .helpers import get_good
+    goods = get_good(slug_cat, current_select_item, select_items)
+    # if slug_cat != None:
+    #     if current_select_item == '0':
+    #         goods = Goods.objects.filter(category__slug=slug_cat, is_published=True)
+    #     elif current_select_item in ['1', '2',]:
+    #         goods = Goods.objects.filter(category__slug=slug_cat, is_published=True).order_by(select_items[int(current_select_item)]['order'])
+    #     else:
+    #         goods = Goods.objects.filter(category__slug=slug_cat, is_published=True)
+    # else:
+    #     if current_select_item in ['0', '', None]:
+    #         goods = Goods.objects.filter(is_published=True)
+    #     elif current_select_item == '1':
+    #         goods = Goods.objects.filter(is_published=True).order_by('price')
+    #     elif current_select_item == '2':
+    #         goods = Goods.objects.filter(is_published=True).order_by('-price')
+    #     else:
+    #         goods = Goods.objects.filter(is_published=True)
 
-    if slug_cat != None:
-        if current_select_item == '0':
-            goods = Goods.objects.filter(category__slug=slug_cat, is_published=True)
-        elif current_select_item in ['1', '2',]:
-            goods = Goods.objects.filter(category__slug=slug_cat, is_published=True).order_by(select_items[int(current_select_item)]['order'])
-        else:
-            goods = Goods.objects.filter(category__slug=slug_cat, is_published=True)
-    else:
-        if current_select_item in ['0', '', None]:
-            goods = Goods.objects.filter(is_published=True)
-        elif current_select_item == '1':
-            goods = Goods.objects.filter(is_published=True).order_by('price')
-        elif current_select_item == '2':
-            goods = Goods.objects.filter(is_published=True).order_by('-price')
-        else:
-            goods = Goods.objects.filter(is_published=True)
-
-
-    g = Goods.objects.values('title', 'is_published', 'images')
+    # g = Goods.objects.values('title', 'is_published', 'images')
     images = Gallery.objects.all()
     sps = {}
     for i in images:
@@ -328,14 +365,23 @@ def basket(request):
 
     return render(request, 'UralsSteelStore/basket.html', context=context)
 
-def about_us(request):
-    context = {
-        'menu': menu,
-    }
-    if memory['basket_total_price']:
-        context['basket_total_price'] = memory['basket_total_price']
+# def about_us(request):
+#     context = {
+#         'menu': menu,
+#     }
+#     if memory['basket_total_price']:
+#         context['basket_total_price'] = memory['basket_total_price']
+#
+#     return render(request, 'UralsSteelStore/about_us.html', context=context)
+class About_Us_TemplateView(TemplateView):
+    template_name = 'UralsSteelStore/about_us.html'
 
-    return render(request, 'UralsSteelStore/about_us.html', context=context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        if memory['basket_total_price']:
+            context['basket_total_price'] = memory['basket_total_price']
+        return context
 
 def contacts_ways(request):
     context = {
@@ -351,7 +397,6 @@ def contacts_ways(request):
     if memory['basket_total_price']:
         context['basket_total_price'] = memory['basket_total_price']
     return render(request, 'UralsSteelStore/contacts_ways.html', context=context)
-
 
 class RegisterUser(CreateView):
     """Класс регистрации пользователей, при успешной регистрации пользователь автоматически авторизуется благодаря
