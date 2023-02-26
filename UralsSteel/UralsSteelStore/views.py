@@ -1,10 +1,9 @@
-import random
 
 from django.contrib.auth import logout, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView
@@ -13,8 +12,8 @@ from .models import *
 from .forms import *
 from django.db.models import Count
 import pandas as pd
-from django.views.generic import ListView, DetailView, CreateView
-from django.views.generic.edit import BaseFormView
+from django.views.generic import ListView, CreateView
+from .helpers import get_good
 
 # Create your views here.
 menu = [{'title': 'Услуги', 'url_name': 'services'},
@@ -22,7 +21,6 @@ menu = [{'title': 'Услуги', 'url_name': 'services'},
         {'title': 'О компании', 'url_name': 'about_us'},
         {'title': 'Контакты', 'url_name': 'contacts_ways'},
 ]
-
 memory = {
     'good_id_to_basket': [],
     'basket_total_price': 0
@@ -53,6 +51,8 @@ class IndexListView(ListView):
         context['naw_cat'] = Category_mp.objects.get(pk=self.kwargs['category_id'] if 'category_id' in self.kwargs else category_id)
         if 'form' in kwargs:
             context['form'] = kwargs['form']
+        if memory['basket_total_price']:
+            context['basket_total_price'] = memory['basket_total_price']
         return context
 # def index(request, category_id=1):
 #     if request.method == 'POST':
@@ -148,7 +148,6 @@ class Metal_cutting_View(View):
         context['form'] = form
         context['menu'] = menu
         return render(request, self.template_name, context=context)
-
 def shop_catalog(request, slug_cat=None,):
 
     select_items = [
@@ -160,8 +159,10 @@ def shop_catalog(request, slug_cat=None,):
 
     cats = Category.objects.annotate(cnt=Count('goods')).order_by('id')
     current_select_item = request.POST.get('shop_goods_start_with')
-    from .helpers import get_good
     goods = get_good(slug_cat, current_select_item, select_items)
+    paginator = Paginator(goods, 9)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     # if slug_cat != None:
     #     if current_select_item == '0':
     #         goods = Goods.objects.filter(category__slug=slug_cat, is_published=True)
@@ -189,11 +190,12 @@ def shop_catalog(request, slug_cat=None,):
     context = {
         'menu': menu,
         'cats': cats,
-        'goods': goods,
+        'goods': page_obj,
         'select_items': select_items,
         'now_item': current_select_item,
         'sps': sps,
-        'plh': plh
+        'plh': plh,
+        # 'page_obj': page_obj
     }
 
     if len(memory['good_id_to_basket']) > 0:
@@ -221,7 +223,6 @@ def shop_catalog(request, slug_cat=None,):
 
 
     return render(request, 'UralsSteelStore/shop_catalog.html', context=context)
-
 def about_good(request, slug_cat=None, slug_good_name=None, current_img=None):
     context = {}
     context['menu'] = menu
@@ -273,7 +274,6 @@ def about_good(request, slug_cat=None, slug_good_name=None, current_img=None):
 
 
     return render(request, 'UralsSteelStore/about_good.html', context=context)
-
 def basket(request):
 
     context = {
@@ -364,7 +364,6 @@ def basket(request):
 
 
     return render(request, 'UralsSteelStore/basket.html', context=context)
-
 # def about_us(request):
 #     context = {
 #         'menu': menu,
@@ -382,7 +381,6 @@ class About_Us_TemplateView(TemplateView):
         if memory['basket_total_price']:
             context['basket_total_price'] = memory['basket_total_price']
         return context
-
 def contacts_ways(request):
     context = {
         'menu': menu,
@@ -397,7 +395,6 @@ def contacts_ways(request):
     if memory['basket_total_price']:
         context['basket_total_price'] = memory['basket_total_price']
     return render(request, 'UralsSteelStore/contacts_ways.html', context=context)
-
 class RegisterUser(CreateView):
     """Класс регистрации пользователей, при успешной регистрации пользователь автоматически авторизуется благодаря
     методу form_valid"""
@@ -409,12 +406,14 @@ class RegisterUser(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['menu'] = menu
+        if memory['basket_total_price']:
+            context['basket_total_price'] = memory['basket_total_price']
         return context
+
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
         return redirect('home')
-
 class AuthorisationUser(LoginView):
     """Класс авторизации пользователей, при успешной авторизации перенаправляет на первую страницу"""
 
@@ -424,11 +423,12 @@ class AuthorisationUser(LoginView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['menu'] = menu
+        if memory['basket_total_price']:
+            context['basket_total_price'] = memory['basket_total_price']
         return context
 
     def get_success_url(self):
         return reverse_lazy('home')
-
 def logout_user(request):
     """Выход пользователя из авторизованного состояния"""
     logout(request)

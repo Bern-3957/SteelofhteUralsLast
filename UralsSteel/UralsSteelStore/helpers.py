@@ -20,3 +20,4 @@ def get_good(slug_cat, current_select_item, select_items):
         else:
             goods = Goods.objects.filter(is_published=True)
     return goods
+

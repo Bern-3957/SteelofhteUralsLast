@@ -65,7 +65,6 @@ class ModalRequestForm(forms.Form):
             'class': 'modal_checkb',
         }))
 
-
 class BasketRequestForm(forms.Form):
     DELIVERY_CHOICES = [('Самовывоз', 'Самовывоз'),
                         ('Доставка собственным транспортом', 'Доставка собственным транспортом'),

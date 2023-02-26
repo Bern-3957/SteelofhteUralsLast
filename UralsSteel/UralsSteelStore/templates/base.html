@@ -107,6 +107,50 @@
 </footer>
 </div>
 
+<div class="modal" id="modal_form_request">
+<div class="modal_dialog">
+
+    <div class="modal_content">
+        <button class="modal_close" type="button" data-close>
+            <img src="{% static 'UralsSteelStore/icons/modal-close.png' %}" alt="close-image">
+        </button>
+        <div class="modal_title">Заявка на обратный звонок</div>
+        <div class="modal_subtitle">Оставьте нам свои данные, и наши специалисты <br> свяжутся с вами в ближайшее время</div>
+        <form action="" method="post" class="modal_form">
+            {% csrf_token %}
+            <div class="modal_item">
+                <label for="{{ form.full_name.id_for_label }}" class="modal_label">{{ form.full_name.label }}</label>
+                {{ form.full_name }}
+            </div>
+
+            <div class="modal_item">
+                <label for="{{ form.phone_number.id_for_label }}" class="modal_label">{{ form.phone_number.label }}</label>
+                {{ form.phone_number }}
+            </div>
+
+            <div class="modal_item">
+                <label for="{{ form.email.id_for_label }}" class="modal_label">{{ form.email.label }}</label>
+                {{ form.email }}
+            </div>
+
+            <div class="modal_item">
+                <label for="{{ form.comment.id_for_label }}" class="modal_label">{{ form.comment.label }}</label>
+                {{ form.comment }}
+            </div>
+
+            <div class="modal_item_ch">
+                {{ form.checkb }}
+                <label for="{{ form.checkb.id_for_label }}" class="modal_checkb_lab">Я согласен <u>на обработку персональных данных</u></label>
+            </div>
+
+            <button type="submit" class="modal_btn">
+                Отправить заявку
+            </button>
+        </form>
+    </div>
+</div>
+</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function(event) {
         var scrollpos = localStorage.getItem('scrollpos');

@@ -109,6 +109,27 @@
                         </div>
                     </div>
                 {% endfor %}
+                {% if goods.has_other_pages %}
+                    <ul class="shop_goods_paginator">
+                        {% if goods.has_previous %}
+                            <a href="?page={{ goods.previous_page_number }}" class="shop_goods_paginator_previous_link"><img class="shop_goods_paginator_previous_img" src="{% static 'UralsSteelStore/icons/left.png' %}" alt="left"></a>
+                        {% endif %}
+                        {% for p_number in goods.paginator.page_range %}
+                            {% if goods.number == p_number %}
+                                <li class="shop_goods_paginator_item_ch">
+                                    <a href="?page={{ p_number }}" class="shop_goods_paginator_item_link">{{ p_number }}</a>
+                                </li>
+                            {% elif p_number >= goods.number|add:-2 and p_number <= goods.number|add:2 %}
+                                <li class="shop_goods_paginator_item">
+                                    <a href="?page={{ p_number }}" class="shop_goods_paginator_item_link">{{ p_number }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if goods.has_next %}
+                            <a href="?page={{ goods.next_page_number }}" class="shop_goods_paginator_next_link"><img class="shop_goods_paginator_next_img" src="{% static 'UralsSteelStore/icons/right.png' %}" alt="right"></a>
+                        {% endif %}
+                    </ul>
+                {% endif %}
 
 
             </div>

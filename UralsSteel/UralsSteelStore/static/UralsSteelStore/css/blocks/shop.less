@@ -3,7 +3,8 @@
 .shop{
 
     &_inner{
-        padding: 30px 60px;
+        position: relative;
+        padding: 30px 60px 90px 60px;
         display: flex;
         gap: 23px;
     }
@@ -13,7 +14,8 @@
         width: 100%;
         //max-width: 280px;
         max-width: 20.01%;
-        min-height: 700px;
+        max-height: 700px;
+        min-height: 500px;
         padding: 29px 19px;
 
         background: #F4F5F7;
@@ -344,6 +346,81 @@
             width: 320px;
             height: 320px;
             text-decoration: none;
+        }
+
+        &_paginator{
+            display: flex;
+            position: absolute;
+            align-items: center;
+            bottom: 15px;
+            left: 50%;
+
+            gap: 20px;
+
+            &_next_link{
+                width: 30px;
+                height: 30px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 1px solid black;
+                border-radius: 50%;
+                transition: .3s;
+
+                &:hover{
+                    box-shadow: 0px 2px 50px 0px rgba(34, 60, 80, 0.37) inset;
+                }
+            }
+            &_previous_link{
+                width: 30px;
+                height: 30px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 1px solid black;
+                border-radius: 50%;
+                transition: .3s;
+
+                &:hover{
+                    box-shadow: 0px 2px 50px 0px rgba(34, 60, 80, 0.37) inset;
+                }
+            }
+
+            &_next_img{
+                max-width: 10px;
+            }
+            &_previous_img{
+                max-width: 10px;
+            }
+
+
+            &_item{
+                list-style-type: none;
+                width: 20px;
+                height: 20px;
+                //border: 1px solid black;
+                //border-radius: 50%;
+                //display: flex;
+                //justify-content: center;
+                //align-items: center;
+
+                &_ch{
+                    list-style-type: none;
+                    width: 20px;
+                    height: 20px;
+                    .shop_goods_paginator_item_link{
+                        color: black;
+                        text-decoration: underline;
+                    }
+                }
+
+                &_link{
+                    color: #515457;
+                    font-weight: 400;
+                    font-size: 20px;
+
+                }
+            }
         }
 
 

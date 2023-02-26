@@ -955,14 +955,16 @@ span {
   color: #fff;
 }
 .shop_inner {
-  padding: 30px 60px;
+  position: relative;
+  padding: 30px 60px 90px 60px;
   display: flex;
   gap: 23px;
 }
 .shop_filter {
   width: 100%;
   max-width: 20.01%;
-  min-height: 700px;
+  max-height: 700px;
+  min-height: 500px;
   padding: 29px 19px;
   background: #F4F5F7;
   border-radius: 8px;
@@ -1225,6 +1227,65 @@ span {
   width: 320px;
   height: 320px;
   text-decoration: none;
+}
+.shop_goods_paginator {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  bottom: 15px;
+  left: 50%;
+  gap: 20px;
+}
+.shop_goods_paginator_next_link {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+.shop_goods_paginator_next_link:hover {
+  box-shadow: 0px 2px 50px 0px rgba(34, 60, 80, 0.37) inset;
+}
+.shop_goods_paginator_previous_link {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+.shop_goods_paginator_previous_link:hover {
+  box-shadow: 0px 2px 50px 0px rgba(34, 60, 80, 0.37) inset;
+}
+.shop_goods_paginator_next_img {
+  max-width: 10px;
+}
+.shop_goods_paginator_previous_img {
+  max-width: 10px;
+}
+.shop_goods_paginator_item {
+  list-style-type: none;
+  width: 20px;
+  height: 20px;
+}
+.shop_goods_paginator_item_ch {
+  list-style-type: none;
+  width: 20px;
+  height: 20px;
+}
+.shop_goods_paginator_item_ch .shop_goods_paginator_item_link {
+  color: black;
+  text-decoration: underline;
+}
+.shop_goods_paginator_item_link {
+  color: #515457;
+  font-weight: 400;
+  font-size: 20px;
 }
 .good {
   padding: 0 80px 50px 80px;
