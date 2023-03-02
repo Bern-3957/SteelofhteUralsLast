@@ -163,24 +163,7 @@ def shop_catalog(request, slug_cat=None,):
     paginator = Paginator(goods, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    # if slug_cat != None:
-    #     if current_select_item == '0':
-    #         goods = Goods.objects.filter(category__slug=slug_cat, is_published=True)
-    #     elif current_select_item in ['1', '2',]:
-    #         goods = Goods.objects.filter(category__slug=slug_cat, is_published=True).order_by(select_items[int(current_select_item)]['order'])
-    #     else:
-    #         goods = Goods.objects.filter(category__slug=slug_cat, is_published=True)
-    # else:
-    #     if current_select_item in ['0', '', None]:
-    #         goods = Goods.objects.filter(is_published=True)
-    #     elif current_select_item == '1':
-    #         goods = Goods.objects.filter(is_published=True).order_by('price')
-    #     elif current_select_item == '2':
-    #         goods = Goods.objects.filter(is_published=True).order_by('-price')
-    #     else:
-    #         goods = Goods.objects.filter(is_published=True)
 
-    # g = Goods.objects.values('title', 'is_published', 'images')
     images = Gallery.objects.all()
     sps = {}
     for i in images:
@@ -220,9 +203,32 @@ def shop_catalog(request, slug_cat=None,):
     if memory['basket_total_price']:
         context['basket_total_price'] = memory['basket_total_price']
 
-
-
     return render(request, 'UralsSteelStore/shop_catalog.html', context=context)
+
+class ShopCatalog(ListView):
+    model = Goods
+    template_name = 'UralsSteelStore/shop_catalog.html'
+    context_object_name = 'goods'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        return context
+    def get_queryset(self):
+        return Goods.objects.all()
+
+class ShopCatalogCategory(ListView):
+    model = Category
+    template_name = 'UralsSteelStore/shop_catalog.html'
+    context_object_name = 'cats'
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['menu'] = menu
+    #     return context
+    def get_queryset(self):
+        return Category.objects.annotate(cnt=Count('goods')).order_by('id')
+
+
+
 def about_good(request, slug_cat=None, slug_good_name=None, current_img=None):
     context = {}
     context['menu'] = menu
