@@ -16,6 +16,8 @@ from django.views.generic import ListView, CreateView
 from .helpers import get_good
 
 # Create your views here.
+from .utils import ShopCatalogDataMixin
+
 menu = [{'title': 'Услуги', 'url_name': 'services'},
         {'title': 'Каталог продукции', 'url_name': 'shop_catalog'},
         {'title': 'О компании', 'url_name': 'about_us'},
@@ -25,6 +27,13 @@ memory = {
     'good_id_to_basket': [],
     'basket_total_price': 0
 }
+
+select_items = [
+    {'number': '0', 'title': 'По умолчанию', 'order': 'ordinary_price'},
+    {'number': '1', 'title': 'По возр. цены', 'order': 'price'},
+    {'number': '2', 'title': 'По убыв. цены', 'order': '-price'},
+
+]
 
 class IndexListView(ListView):
     model = Products
@@ -205,28 +214,33 @@ def shop_catalog(request, slug_cat=None,):
 
     return render(request, 'UralsSteelStore/shop_catalog.html', context=context)
 
-class ShopCatalog(ListView):
+class ShopCatalog(ShopCatalogDataMixin, ListView):
     model = Goods
     template_name = 'UralsSteelStore/shop_catalog.html'
     context_object_name = 'goods'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['menu'] = menu
-        return context
+        c_def = self.get_user_context()
+        return dict(list(context.items()) + list(c_def.items()))
     def get_queryset(self):
         return Goods.objects.all()
 
-class ShopCatalogCategory(ListView):
-    model = Category
-    template_name = 'UralsSteelStore/shop_catalog.html'
-    context_object_name = 'cats'
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['menu'] = menu
-    #     return context
-    def get_queryset(self):
-        return Category.objects.annotate(cnt=Count('goods')).order_by('id')
+    def post(self, request, *args, **kwargs):
+        context = self.post_response(request, *args, **kwargs)
+        return render(request, self.template_name, context=context)
 
+
+class ShopCatalogCategory(ShopCatalogDataMixin, ListView):
+    model = Goods
+    template_name = 'UralsSteelStore/shop_catalog.html'
+    context_object_name = 'goods'
+    def get(self, request, *args, **kwargs):
+        context = self.get_user_context(**kwargs)
+        return render(request, self.template_name, context=context)
+
+    def post(self, request, slug_cat, *args, **kwargs):
+        context = self.post_response(request, *args, **kwargs)
+        return render(request, self.template_name, context=context)
 
 
 def about_good(request, slug_cat=None, slug_good_name=None, current_img=None):

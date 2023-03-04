@@ -1,7 +1,12 @@
 from .models import *
+select_items = [
+    {'number': '0', 'title': 'По умолчанию', 'order': 'ordinary_price'},
+    {'number': '1', 'title': 'По возр. цены', 'order': 'price'},
+    {'number': '2', 'title': 'По убыв. цены', 'order': '-price'},
 
+]
 
-def get_good(slug_cat, current_select_item, select_items):
+def get_good(slug_cat, current_select_item):
 
     if slug_cat != None:
         if current_select_item == '0':
