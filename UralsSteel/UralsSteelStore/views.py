@@ -157,62 +157,62 @@ class Metal_cutting_View(View):
         context['form'] = form
         context['menu'] = menu
         return render(request, self.template_name, context=context)
-def shop_catalog(request, slug_cat=None,):
-
-    select_items = [
-        {'number': '0', 'title': 'По умолчанию', 'order': 'ordinary_price'},
-        {'number': '1', 'title': 'По возр. цены', 'order': 'price'},
-        {'number': '2', 'title': 'По убыв. цены', 'order': '-price'},
-
-    ]
-
-    cats = Category.objects.annotate(cnt=Count('goods')).order_by('id')
-    current_select_item = request.POST.get('shop_goods_start_with')
-    goods = get_good(slug_cat, current_select_item, select_items)
-    paginator = Paginator(goods, 9)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    images = Gallery.objects.all()
-    sps = {}
-    for i in images:
-        sps[i.good.pk] = i.image.url
-    print(sps)
-    plh = 'https://via.placeholder.com/320x320'
-    context = {
-        'menu': menu,
-        'cats': cats,
-        'goods': page_obj,
-        'select_items': select_items,
-        'now_item': current_select_item,
-        'sps': sps,
-        'plh': plh,
-        # 'page_obj': page_obj
-    }
-
-    if len(memory['good_id_to_basket']) > 0:
-        basket_items = []
-        for i in memory['good_id_to_basket']:
-            item = Goods.objects.get(pk=i)
-            basket_items.append(item)
-            print(basket_items)
-
-        basket_total_price = 0
-        for i in basket_items:
-            basket_total_price += i.price
-        context['basket_total_price'] = basket_total_price
-        memory['basket_total_price'] = basket_total_price
-
-    if request.POST.get('good_info_btn'):
-        good_id_to_basket = request.POST.get('good_info_btn')
-        print(good_id_to_basket)
-        if good_id_to_basket not in memory['good_id_to_basket']:
-            memory['good_id_to_basket'].append(good_id_to_basket)
-            return redirect(request.META['HTTP_REFERER'])
-    if memory['basket_total_price']:
-        context['basket_total_price'] = memory['basket_total_price']
-
-    return render(request, 'UralsSteelStore/shop_catalog.html', context=context)
+# def shop_catalog(request, slug_cat=None,):
+#
+#     select_items = [
+#         {'number': '0', 'title': 'По умолчанию', 'order': 'ordinary_price'},
+#         {'number': '1', 'title': 'По возр. цены', 'order': 'price'},
+#         {'number': '2', 'title': 'По убыв. цены', 'order': '-price'},
+#
+#     ]
+#
+#     cats = Category.objects.annotate(cnt=Count('goods')).order_by('id')
+#     current_select_item = request.POST.get('shop_goods_start_with')
+#     goods = get_good(slug_cat, current_select_item, select_items)
+#     paginator = Paginator(goods, 9)
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#
+#     images = Gallery.objects.all()
+#     sps = {}
+#     for i in images:
+#         sps[i.good.pk] = i.image.url
+#     print(sps)
+#     plh = 'https://via.placeholder.com/320x320'
+#     context = {
+#         'menu': menu,
+#         'cats': cats,
+#         'goods': page_obj,
+#         'select_items': select_items,
+#         'now_item': current_select_item,
+#         'sps': sps,
+#         'plh': plh,
+#         # 'page_obj': page_obj
+#     }
+#
+#     if len(memory['good_id_to_basket']) > 0:
+#         basket_items = []
+#         for i in memory['good_id_to_basket']:
+#             item = Goods.objects.get(pk=i)
+#             basket_items.append(item)
+#             print(basket_items)
+#
+#         basket_total_price = 0
+#         for i in basket_items:
+#             basket_total_price += i.price
+#         context['basket_total_price'] = basket_total_price
+#         memory['basket_total_price'] = basket_total_price
+#
+#     if request.POST.get('good_info_btn'):
+#         good_id_to_basket = request.POST.get('good_info_btn')
+#         print(good_id_to_basket)
+#         if good_id_to_basket not in memory['good_id_to_basket']:
+#             memory['good_id_to_basket'].append(good_id_to_basket)
+#             return redirect(request.META['HTTP_REFERER'])
+#     if memory['basket_total_price']:
+#         context['basket_total_price'] = memory['basket_total_price']
+#
+#     return render(request, 'UralsSteelStore/shop_catalog.html', context=context)
 
 class ShopCatalog(ShopCatalogDataMixin, ListView):
     model = Goods
@@ -220,13 +220,23 @@ class ShopCatalog(ShopCatalogDataMixin, ListView):
     context_object_name = 'goods'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context()
-        return dict(list(context.items()) + list(c_def.items()))
+        c_def = self.get_user_context(current_select_item=None, memory=memory)
+        context = dict(list(context.items()) + list(c_def.items()))
+
+        return context
+
+
     def get_queryset(self):
         return Goods.objects.all()
 
     def post(self, request, *args, **kwargs):
-        context = self.post_response(request, *args, **kwargs)
+        context = self.post_response(request, memory, *args, **kwargs)
+        if self.request.POST.get('good_info_btn'):
+            good_id_to_basket = request.POST.get('good_info_btn')
+            print(good_id_to_basket)
+            if good_id_to_basket not in memory['good_id_to_basket']:
+                memory['good_id_to_basket'].append(good_id_to_basket)
+                return redirect(request.META['HTTP_REFERER'])
         return render(request, self.template_name, context=context)
 
 
@@ -235,11 +245,16 @@ class ShopCatalogCategory(ShopCatalogDataMixin, ListView):
     template_name = 'UralsSteelStore/shop_catalog.html'
     context_object_name = 'goods'
     def get(self, request, *args, **kwargs):
-        context = self.get_user_context(**kwargs)
+        context = self.get_user_context(memory=memory, current_select_item=None, **kwargs)
         return render(request, self.template_name, context=context)
 
     def post(self, request, slug_cat, *args, **kwargs):
-        context = self.post_response(request, *args, **kwargs)
+        context = self.post_response(request, memory=memory,  *args, **kwargs)
+        if self.request.POST.get('good_info_btn'):
+            good_id_to_basket = request.POST.get('good_info_btn')
+            if good_id_to_basket not in memory['good_id_to_basket']:
+                memory['good_id_to_basket'].append(good_id_to_basket)
+                return redirect(request.META['HTTP_REFERER'])
         return render(request, self.template_name, context=context)
 
 
